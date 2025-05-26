@@ -18,7 +18,7 @@ class Task(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
     due_date = Column(DateTime, nullable=True)
-    is_completed = Column(Boolean, default=False)
+    completed = Column(Boolean, default=False)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="tasks")

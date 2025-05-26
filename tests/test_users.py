@@ -1,10 +1,12 @@
 from fastapi.testclient import TestClient
+from app.database import setup_function
 from run import app
 
 client = TestClient(app)
 
 
 def test_register_and_login():
+    setup_function()
     response = client.post("/register", json={"username": "testuser", "password": "secret"})
     assert response.status_code == 200
 

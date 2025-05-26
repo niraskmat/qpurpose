@@ -10,6 +10,7 @@ def get_auth_token():
     return response.json()["access_token"]
 
 def test_task_actions():
+
     token = get_auth_token()
     headers = {"Authorization": f"Bearer {token}"}
 

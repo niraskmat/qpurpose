@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -7,37 +7,28 @@ class UserCreate(BaseModel):
     password: str
 
 class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True, extra='ignore')
     id: int
     username: str
-    class Config:
-        orm_mode = True
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
 class TaskBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-    due_date: Optional[datetime] = None
-    is_completed: Optional[bool] = False
-
-class TaskCreate(TaskBase):
-    pass
-
-class TaskOut(TaskBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class TaskUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True, extra='ignore')
     title: Optional[str] = None
     description: Optional[str] = None
     due_date: Optional[datetime] = None
     completed: Optional[bool] = None
 
-    class Config:
-        orm_mode = True
+class TaskCreate(TaskBase):
+    title: str
+
+class TaskOut(TaskBase):
+    model_config = ConfigDict(from_attributes=True, extra='ignore')
+    id: int
+    owner_id: int
+
+class TaskUpdate(TaskBase):
+    pass
