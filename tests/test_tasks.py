@@ -23,14 +23,21 @@ def test_task_actions():
     assert response.status_code == 200
     assert len(response.json()) >= 1
 
-    # Update
+    # Update - overwrite
     response = client.put(f"/tasks/{task_id}", json={"title": "Updated Task"}, headers=headers)
     assert response.status_code == 200
     assert response.json()["title"] == "Updated Task"
 
+    # Update - edit
+    response = client.patch(f"/tasks/{task_id}", json={"description": "This is the new description"}, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["title"] == "Updated Task"
+    assert response.json()["description"] == "This is the new description"
+
     # Delete
     response = client.delete(f"/tasks/{task_id}", headers=headers)
     assert response.status_code == 200
+
 
 if __name__ == "__main__":
     test_task_actions()
