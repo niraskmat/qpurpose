@@ -4,10 +4,8 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 
-os.environ["DATABASE_URL"] = r"sqlite:///C:\Users\niras\PycharmProjects\qpurpose\data\test.db"
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
-print(DATABASE_URL)
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+DATABASE_URL = os.getenv("DATABASE_URL", r"sqlite:///C:\Users\niras\PycharmProjects\qpurpose\data\test.db?check_same_thread=False")
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
