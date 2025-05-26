@@ -18,7 +18,7 @@ def get_tasks(db: Session = Depends(database.get_db), current_user: models.User 
     return db.query(models.Task).filter(models.Task.owner_id == current_user.id).all()
 
 @router.put("/tasks/{task_id}", response_model=schemas.TaskOut)
-def update_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+def overwrite_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
     db_task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.owner_id == current_user.id).first()
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -38,7 +38,7 @@ def delete_task(task_id: int, db: Session = Depends(database.get_db), current_us
     return {"detail": "Task deleted"}
 
 @router.patch("/tasks/{task_id}", response_model=schemas.TaskOut)
-def patch_task(
+def update_task(
     task_id: int,
     task: schemas.TaskUpdate,
     db: Session = Depends(database.get_db),
