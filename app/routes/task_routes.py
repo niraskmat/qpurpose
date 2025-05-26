@@ -36,3 +36,27 @@ def delete_task(task_id: int, db: Session = Depends(database.get_db), current_us
     db.delete(db_task)
     db.commit()
     return {"detail": "Task deleted"}
+
+@router.patch("/tasks/{task_id}", response_model=schemas.TaskOut)
+def patch_task(
+    task_id: int,
+    task: schemas.TaskUpdate,
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    db_task = db.query(models.Task).filter(
+        models.Task.id == task_id,
+        models.Task.owner_id == current_user.id
+    ).first()
+
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    update_data = task.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_task, key, value)
+
+    db.commit()
+    db.refresh(db_task)
+
+    return db_task
