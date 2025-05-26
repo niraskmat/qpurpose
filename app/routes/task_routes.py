@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.post("/tasks", response_model=schemas.TaskOut)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
-    db_task = models.Task(**task.dict(), owner_id=current_user.id)
+    db_task = models.Task(**task.model_dump(), owner_id=current_user.id)
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
