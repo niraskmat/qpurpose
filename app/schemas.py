@@ -19,6 +19,7 @@ class TaskBase(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra='ignore')
     title: Optional[str] = None
     description: Optional[str] = None
+    start_date: Optional[datetime] = None
     due_date: Optional[datetime] = None
     completed: Optional[bool] = None
 
