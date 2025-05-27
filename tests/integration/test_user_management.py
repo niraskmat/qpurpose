@@ -1,7 +1,6 @@
 from app.database import clear_db
 
 
-
 def test_register_and_login(client):
     clear_db()
     response = client.post("/register", json={"username": "testuser", "password": "secret"})

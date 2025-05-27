@@ -6,7 +6,8 @@ from .. import models, schemas, database, auth
 router = APIRouter()
 
 @router.post("/tasks", response_model=schemas.TaskOut)
-def create_task(task: schemas.TaskCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+def create_task(task: schemas.TaskCreate, db: Session = Depends(database.get_db),
+                current_user: models.User = Depends(auth.get_current_user)):
     db_task = models.Task(**task.model_dump(), owner_id=current_user.id)
     db.add(db_task)
     db.commit()
@@ -18,8 +19,10 @@ def get_tasks(db: Session = Depends(database.get_db), current_user: models.User 
     return db.query(models.Task).filter(models.Task.owner_id == current_user.id).all()
 
 @router.put("/tasks/{task_id}", response_model=schemas.TaskOut)
-def overwrite_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
-    db_task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.owner_id == current_user.id).first()
+def overwrite_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(database.get_db),
+                   current_user: models.User = Depends(auth.get_current_user)):
+    db_task = db.query(models.Task).filter(models.Task.id == task_id,
+                                           models.Task.owner_id == current_user.id).first()
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
     for key, value in task.model_dump().items():
@@ -29,8 +32,10 @@ def overwrite_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends
     return db_task
 
 @router.delete("/tasks/{task_id}")
-def delete_task(task_id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
-    db_task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.owner_id == current_user.id).first()
+def delete_task(task_id: int, db: Session = Depends(database.get_db),
+                current_user: models.User = Depends(auth.get_current_user)):
+    db_task = db.query(models.Task).filter(models.Task.id == task_id,
+                                           models.Task.owner_id == current_user.id).first()
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
     db.delete(db_task)
@@ -38,16 +43,10 @@ def delete_task(task_id: int, db: Session = Depends(database.get_db), current_us
     return {"detail": "Task deleted"}
 
 @router.patch("/tasks/{task_id}", response_model=schemas.TaskOut)
-def update_task(
-    task_id: int,
-    task: schemas.TaskUpdate,
-    db: Session = Depends(database.get_db),
-    current_user: models.User = Depends(auth.get_current_user)
-):
-    db_task = db.query(models.Task).filter(
-        models.Task.id == task_id,
-        models.Task.owner_id == current_user.id
-    ).first()
+def update_task(task_id: int, task: schemas.TaskUpdate, db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_user)):
+    db_task = db.query(models.Task).filter(models.Task.id == task_id,
+                                           models.Task.owner_id == current_user.id).first()
 
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
