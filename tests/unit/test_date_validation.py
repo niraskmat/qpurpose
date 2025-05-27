@@ -13,7 +13,6 @@ def test_parse_dates_accepts_valid_formats():
     for input_data in inputs:
         task = TaskUpdate(**input_data)
         assert isinstance(task.start_date, datetime)
-        # date matches input (parsed correctly)
         assert task.start_date.day == 1
         assert task.start_date.month == 5
         assert task.start_date.year == 2023
