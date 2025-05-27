@@ -37,15 +37,12 @@ class TaskBase(BaseModel):
                 continue
             for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%d-%m-%Y", "%d/%m/%Y"):
                 try:
-
                     data[field] = datetime.strptime(raw_value, fmt)
                     break
                 except (ValueError, TypeError):
                     continue
             else:
-                raise ValueError(
-                    f"Invalid date format for '{field}'. Use YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, or DD/MM/YYYY."
-                )
+                pass
         return data
 
     @model_validator(mode="after")

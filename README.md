@@ -20,7 +20,7 @@ It features task CRUD, secure login, and registration.
 ## Task info
 
 - Tasks are represented by the variables: title [str], description [str], start_date, due_date, and completed [bool].
-  Dates can be datetime, YYYY-MM-DD, YYYY/MM-DD, DD-MM-YYYY, DD/MM/YYYY.
+  Dates can be standard datetime strings, YYYY-MM-DD, YYYY/MM-DD, DD-MM-YYYY, or DD/MM/YYYY.
 
 
 ---
@@ -93,19 +93,44 @@ pytest
 ### 🐳 Docker Setup
 
 ```bash
+# postgres setup
+cp .env.example .env
+# build and launch the container
 docker-compose up --build
 ```
 - Access API at http://localhost:8000
 
 ---
 
-## Design Decisions
+## Design Decisions and Assumptions
+I generally tried not to assume a lot, and to keep it relatively simple while meeting minimum requirements with a little extra.
+I also aimed for a modular and 'standard' structure without too many layers to keep it easy to understand and review.
 
-- **FastAPI** was chosen for its speed, documentation, and async support.
-- **JWT** enables stateless authentication.
-- **SQLite** simplifies local testing; **PostgreSQL** used via Docker.
+- **FastAPI** was chosen for its speed, automatic documentation, and async support. 
+              This seems like an appropriate choice for something that potentially could have a lot of users. 
+- **Python-jose** chosen because it seemed like a library covering all needs, but upon further review I am slightly worried about the development history where they only recently added official support for python 3.10 and 3.11. 
+                  It would probably have been better with pyJWT.
+- **SQLite** simplifies local testing; **PostgreSQL** used via Docker and intended for use in a production scenario.
+- **SQLAlchemy** allows portability between SQLite and PostgreSQL, with clear model definitions. 
 
 ---
+
+## Comments and Improvements
+
+- I added the patch endpoint because I felt compelled to add the option of editing rather than replacing.
+
+- I added some validation on incoming dates to show how additional validation could work. 
+  This could be in a scenario with a frontend allowing flexible input of dates, so we need to check.
+
+- Credentials and secrets should generally not be left in the code. 
+Here I left test user credentials and a fallback secret_key for the token signing to ease setup and testing.
+However, for a real production scenario I would remove these and replace them with imports from config/environment or some secret manager. 
+
+- Right now the registration is completely unprotected. In production it would need to be protected against misuse with rate limits, email verification etc.
+If the service is not "open", ensuring access is only granted to the targeted users is obviously critical.
+
+- In production we would likely also want to try to force the user to choose a secure password. 
+  But again, no need to make testing too annoying.  
 
 ## Author
 
