@@ -5,6 +5,9 @@
 This project is a RESTful API built using **FastAPI** for managing tasks with user authentication using **JWT**. 
 It features task CRUD, secure login, and registration.
 
+
+You can also access the code on github: https://github.com/niraskmat/qpurpose
+
 ---
 
 ## Features
@@ -13,7 +16,7 @@ It features task CRUD, secure login, and registration.
 - JWT-based Authentication
 - Task Creation, Retrieval, Update (rewrite task), Update (change task), and Deletion
 - SQLite for local development (PostgreSQL-ready with Docker)
-- Unit and Integration Testing with `pytest`
+- Unit and Integration testing with `pytest`
 - Docker and Docker Compose support
 
 
