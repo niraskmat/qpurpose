@@ -7,4 +7,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN chmod +x /app/wait_for_db.sh
+
+CMD ["./wait_for_db.sh", "db", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
